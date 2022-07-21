@@ -95,9 +95,9 @@ public class Inventory {
         return total;
     }
 
-    //REQUIRES: item is an item that exists in inventory
     //EFFECTS: returns the slot that contains the given item
-    private Slot findItem(Item item) {
+    //         if item is not found return null
+    public Slot findItem(Item item) {
         for (Slot slot : slots) {
             if (slot.getItem() == item) {
                 return slot;
@@ -106,20 +106,20 @@ public class Inventory {
         return null;
     }
 
-    //REQUIRES: item is an item that exists in inventory
     //EFFECTS: returns the index of the slot that contains the given item
-    private int findIndex(Item item) {
+    //         if item is not found return -1
+    public int findIndex(Item item) {
         for (int i = 0; i < slots.size(); i++) {
             if (slots.get(i).getItem() == item) {
                 return i;
             }
         }
-        return 0;
+        return -1;
     }
 
-//    public ArrayList<Slot> getSlots() {
-//        return slots;
-//    }
+    public ArrayList<Slot> getSlots() {
+        return slots;
+    }
 
     public int getCoins() {
         return coins;

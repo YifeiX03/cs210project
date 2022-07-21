@@ -102,6 +102,15 @@ class InventoryTest {
     }
 
     @Test
+    public void findNonExistItemTest() {
+        inventory.addItem(apple, 12);
+        assertEquals(inventory.getSlots().get(0), inventory.findItem(apple));
+        assertEquals(0, inventory.findIndex(apple));
+        assertEquals(null, inventory.findItem(pear));
+        assertEquals(-1, inventory.findIndex(pear));
+    }
+
+    @Test
     public void totalValueTest() {
         assertEquals(0, inventory.getTotalValue());
         inventory.addItem(apple, 1);
