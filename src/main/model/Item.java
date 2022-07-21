@@ -7,6 +7,7 @@ public class Item {
     private String description;
     private int value;
 
+    //REQUIRES: value must be positive
     //EFFECTS: creates an item with given name, description, value
     public Item(String name, String desc, int value) {
         this.name = name;
