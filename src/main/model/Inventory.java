@@ -16,7 +16,11 @@ public class Inventory {
     //MODIFIES: this
     //EFFECTS: adds given number of an item to the inventory
     public void addItem(Item item, int count) {
-        //stub
+        if (contains(item)) {
+            findItem(item).addAmount(count);
+        } else {
+            slots.add(new Slot(item, count));
+        }
     }
 
     //REQUIRES: item must be an item that exists in inventory
@@ -25,7 +29,12 @@ public class Inventory {
     //EFFECTS: removes given number of items from the inventory
     //         if the amount of an item is 0, removes slot from inventory
     public void removeItem(Item item, int count) {
-        //stub
+        if (contains(item)) {
+            findItem(item).removeAmount(count);
+            if (findItem(item).getAmount() == 0) {
+                slots.remove(findIndex(item));
+            }
+        }
     }
 
 //    //REQUIRES: item must be an item that exists in inventory
@@ -64,22 +73,48 @@ public class Inventory {
 
     //EFFECTS: returns true if inventory contains item, else false
     public boolean contains(Item item) {
+        for (Slot slot : slots) {
+            if (slot.getItem() == item) {
+                return true;
+            }
+        }
         return false;
     }
 
     //EFFECTS: returns the amount of given item in inventory
     public int getItemCount(Item item) {
-        return 0;
+        return findItem(item).getAmount();
     }
 
     //EFFECT: returns total value of inventory
     public int getTotalValue() {
-        return 0;
+        int total = 0;
+        for (Slot slot : slots) {
+            total += slot.getItem().getValue() * slot.getAmount();
+        }
+        return total;
     }
 
+    //REQUIRES: item is an item that exists in inventory
     //EFFECTS: returns the slot that contains the given item
     private Slot findItem(Item item) {
-        return new Slot(item, 1);
+        for (Slot slot : slots) {
+            if (slot.getItem() == item) {
+                return slot;
+            }
+        }
+        return null;
+    }
+
+    //REQUIRES: item is an item that exists in inventory
+    //EFFECTS: returns the index of the slot that contains the given item
+    private int findIndex(Item item) {
+        for (int i = 0; i < slots.size(); i++) {
+            if (slots.get(i).getItem() == item) {
+                return i;
+            }
+        }
+        return 0;
     }
 
 //    public ArrayList<Slot> getSlots() {
@@ -89,6 +124,13 @@ public class Inventory {
     public int getCoins() {
         return coins;
     }
+
+//    public void test() {
+//        ArrayList<String> tester = new ArrayList<String>();
+//        for (Slot slot : slots) {
+//            tester.add(slot.getItem().getName());
+//        }
+//    }
 
 //    public ArrayList<Slot> getSelection() {
 //        return selection;

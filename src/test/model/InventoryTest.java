@@ -15,7 +15,7 @@ class InventoryTest {
     public void setUp() {
         inventory = new Inventory();
         apple = new Item("apple", "ordinary apple", 10);
-        pear = new Item("pear", "unordinary pear", 100);
+        pear = new Item("pear", "unordinary pear", 1000);
     }
 
     @Test
@@ -90,6 +90,15 @@ class InventoryTest {
         assertEquals(3, inventory.getItemCount(apple));
         assertTrue(inventory.contains(pear));
         assertEquals(2, inventory.getItemCount(pear));
+    }
+
+    @Test
+    public void removeNonExistItemTest() {
+        inventory.addItem(apple, 12);
+        inventory.removeItem(pear, 7);
+        assertEquals(1, inventory.length());
+        assertTrue(inventory.contains(apple));
+        assertEquals(12, inventory.getItemCount(apple));
     }
 
     @Test
