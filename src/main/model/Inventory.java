@@ -95,6 +95,15 @@ public class Inventory {
         return total;
     }
 
+    //EFFECT: returns total amount of items in inventory
+    public int getTotalItems() {
+        int total = 0;
+        for (Slot slot : slots) {
+            total += slot.getAmount();
+        }
+        return total;
+    }
+
     //EFFECTS: returns the slot that contains the given item
     //         if item is not found return null
     public Slot findItem(Item item) {

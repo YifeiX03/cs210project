@@ -119,5 +119,20 @@ class InventoryTest {
         assertEquals(100, inventory.getTotalValue());
         inventory.addItem(pear, 5);
         assertEquals(5100, inventory.getTotalValue());
+        inventory.removeItem(apple, 1);
+        assertEquals(5090, inventory.getTotalValue());
+    }
+
+    @Test
+    public void totalItemsTest() {
+        assertEquals(0, inventory.getTotalItems());
+        inventory.addItem(apple, 1);
+        assertEquals(1, inventory.getTotalItems());
+        inventory.addItem(apple, 3);
+        assertEquals(4, inventory.getTotalItems());
+        inventory.addItem(pear, 1);
+        assertEquals(5, inventory.getTotalItems());
+        inventory.removeItem(apple, 4);
+        assertEquals(1, inventory.getTotalItems());
     }
 }
