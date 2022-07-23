@@ -26,6 +26,6 @@ This project is of interest to me because I want to create games, and in most ga
 
 *What the inventory should allow:*
 - As a user, I want to be able to add and take items from it
-- As a user, I want to be able to inspect items: look at stats, descriptions, and values
+- As a user, I want to be able to inspect items: look at names, descriptions, and values
 - As a user, I want to the inventory to display the names of all items and amount of individual items
 - As a user, I want to be able to select multiple items and see their collective value

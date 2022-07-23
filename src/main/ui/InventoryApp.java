@@ -18,11 +18,15 @@ import java.util.Scanner;
 //           app will look through the slots, matching given string to name of the item in each slot
 //           once item is found, app will display amount of that item
 //           user will input amount they want to choose
+
+//based on Teller app; link below
+//https://github.students.cs.ubc.ca/CPSC210/TellerApp.git
 public class InventoryApp {
     private Inventory inventory;
     private Inventory selection;
     private Scanner input;
     private Boolean running;
+    private Boolean runningInventory;
 
     private ArrayList<Item> items;
 
@@ -40,12 +44,8 @@ public class InventoryApp {
         initialize();
         createItems();
 
-        inventory.addItem(items.get(0), 15);
-        inventory.addItem(items.get(1), 12);
-
         while (running) {
-            showInventoryMenu();
-            System.out.println("What is your command?");
+            showMenu();
             command = input.next();
             command = command.toUpperCase();
             processCommand(command);
@@ -78,12 +78,10 @@ public class InventoryApp {
     }
 
     //EFFECTS: shows menu to user
-    private void showInventoryMenu() {
+    private void showMenu() {
         System.out.println("\nWhat do you want to do?\n");
-        System.out.println("\tCheck items in inventory (C)");
-        System.out.println("\tAdd items to inventory (A)");
-        System.out.println("\tRemove items from inventory (R)");
-        System.out.println("\tInspect item in inventory (I)");
+        System.out.println("\tInteract with Inventory (I)");
+        System.out.println("\tMake a new item (M)");
         System.out.println("\tSelect items in inventory (S)");
         System.out.println("\tQuit (Q)");
     }
@@ -92,17 +90,11 @@ public class InventoryApp {
     //EFFECTS:processes user command
     private void processCommand(String input) {
         switch (input) {
-            case "C":
+            case "I":
                 checkInventory();
                 break;
-            case "A":
-                addToInventory();
-                break;
-            case "R":
-                removeFromInventory();
-                break;
-            case "I":
-                inspectItem();
+            case "M":
+                makeItem();
                 break;
             case "S":
                 selectMode();
@@ -133,111 +125,193 @@ public class InventoryApp {
             System.out.println("Inventory is empty.");
             pressAnyKeyToContinue();
         } else {
-            System.out.println("Inventory has " + inventory.getTotalItems() + " Items");
-            System.out.println("Inventory has value of " + inventory.getTotalValue() + "");
-            System.out.println("Items in Inventory:");
-
-            for (Slot slot : inventory.getSlots()) {
-                System.out.println(slot.getAmount() +  " x " +  slot.getItem().getName());
-            }
+            displayInventory(inventory);
 
             pressAnyKeyToContinue();
         }
+        enterInventoryMenu();
+    }
+
+    private void displayInventory(Inventory inventory) {
+        System.out.println("Inventory has " + inventory.getTotalItems() + " Items");
+        System.out.println("Inventory has value of " + inventory.getTotalValue() + "");
+        System.out.println("Items in Inventory:");
+
+        for (Slot slot : inventory.getSlots()) {
+            System.out.println(slot.getAmount() +  " x " +  slot.getItem().getName());
+        }
+    }
+
+    //MODIFIES: this
+    //EFFECTS: enters inventory menu, allows for adding, removing, and inspecting of items
+    private void enterInventoryMenu() {
+        runningInventory = true;
+        String inventoryCommand = null;
+
+        while (runningInventory) {
+            showInventoryMenu();
+            inventoryCommand = input.next();
+            inventoryCommand = inventoryCommand.toUpperCase();
+            processInventoryCommand(inventoryCommand);
+        }
+    }
+
+    private void showInventoryMenu() {
+        System.out.println("\nWhat do you want to do in your inventory?\n");
+        System.out.println("\tAdd items (A)");
+        System.out.println("\tRemove Items (R)");
+        System.out.println("\tInspect Items (I)");
+        System.out.println("\tGo back (B)");
+    }
+
+    //MODIFIES: this
+    //EFFECTS:processes user command
+    private void processInventoryCommand(String input) {
+        switch (input) {
+            case "A":
+                addToInventory();
+                break;
+            case "R":
+                removeFromInventory();
+                break;
+            case "I":
+                inspectItem();
+                break;
+            case "B":
+                quitInventory();
+                break;
+            default:
+                System.out.println("Invalid Command\n");
+        }
+    }
+
+    private void quitInventory() {
+        runningInventory = false;
     }
 
     //EFFECTS: choose items to add to inventory
     private void addToInventory() {
-        System.out.println("Available items to choose from:");
-        for (Item item : items) {
-            System.out.println(item.getName());
-        }
         boolean choosing = true;
         while (choosing) {
+            System.out.println("Available items to choose from:");
+            for (Item item : items) {
+                System.out.println(item.getName());
+            }
             System.out.println("Type the name of the item you want to add, or type 'back' to go back");
             String choice = input.next();
             if (choice.equals("back")) {
-                choosing = false;
                 break;
             } else {
-                boolean found = false;
-                for (Item item : items) {
-                    if (item.getName().equals(choice)) {
-                        found = true;
-                        System.out.println("How many?");
-                        int amount = Integer.parseInt(input.next());
-                        inventory.addItem(item, amount);
-                        choosing = false;
-                        break;
-                    }
-                }
-                if (!found) {
+                boolean found = addingItem(items, choice);
+                if (found) {
+                    choosing = false;
+                } else {
                     System.out.println("Item not found, make sure you're typing it exactly as it appears.");
                 }
             }
         }
+    }
+
+    private boolean addingItem(ArrayList<Item> items, String choice) {
+        for (Item item : items) {
+            if (item.getName().equals(choice)) {
+                System.out.println("How many?");
+                int amount = Integer.parseInt(input.next());
+                inventory.addItem(item, amount);
+                return true;
+            }
+        }
+        return false;
     }
 
     private void removeFromInventory() {
-        System.out.println("Available items to choose from:");
-        for (Slot slot : inventory.getSlots()) {
-            System.out.println(slot.getItem().getName());
-        }
         boolean choosing = true;
         while (choosing) {
+            displayInventory(inventory);
             System.out.println("Type the name of the item you want to remove, or type 'back' to go back");
             String choice = input.next();
             if (choice.equals("back")) {
-                choosing = false;
                 break;
             } else {
-                boolean found = false;
-                for (Slot slot : inventory.getSlots()) {
-                    if (slot.getItem().getName().equals(choice)) {
-                        found = true;
-                        System.out.println("How many?");
-                        int amount = Integer.parseInt(input.next());
-                        inventory.removeItem(slot.getItem(), amount);
-                        choosing = false;
-                        break;
-                    }
-                }
-                if (!found) {
+                boolean found = removingItem(inventory, choice);
+                if (found) {
+                    choosing = false;
+                } else {
                     System.out.println("Item not found, make sure you're typing it exactly as it appears.");
                 }
             }
         }
     }
 
-    private void inspectItem() {
-        System.out.println("Available items to choose from:");
+    private boolean removingItem(Inventory inventory, String choice) {
         for (Slot slot : inventory.getSlots()) {
-            System.out.println(slot.getItem().getName());
+            if (slot.getItem().getName().equals(choice)) {
+                System.out.println("How many?");
+                int amount = Integer.parseInt(input.next());
+                inventory.removeItem(slot.getItem(), amount);
+                return true;
+            }
         }
+        return false;
+    }
+
+    private void inspectItem() {
         boolean choosing = true;
         while (choosing) {
+            displayInventory(inventory);
             System.out.println("Type the name of the item you want to inspect, or type 'back' to go back");
             String choice = input.next();
             if (choice.equals("back")) {
-                choosing = false;
                 break;
             } else {
                 boolean found = false;
                 for (Slot slot : inventory.getSlots()) {
                     if (slot.getItem().getName().equals(choice)) {
-                        found = true;
-                        System.out.println("Name: " + slot.getItem().getName());
-                        System.out.println("Description: " + slot.getItem().getDescription());
-                        System.out.println("Value: " + slot.getItem().getValue());
-                        pressAnyKeyToContinue();
+                        found = inspectingItem(inventory, choice);
                         choosing = false;
                         break;
                     }
                 }
-                if (!found) {
+                if (found) {
+                    choosing = false;
+                } else {
                     System.out.println("Item not found, make sure you're typing it exactly as it appears.");
                 }
             }
         }
+    }
+
+    private boolean inspectingItem(Inventory inventory, String choice) {
+        for (Slot slot : inventory.getSlots()) {
+            if (slot.getItem().getName().equals(choice)) {
+                System.out.println("Name: " + slot.getItem().getName());
+                System.out.println("Description: " + slot.getItem().getDescription());
+                System.out.println("Value: " + slot.getItem().getValue());
+                pressAnyKeyToContinue();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void makeItem() {
+//        System.out.println("Enter 'back' at any time to go back");
+        System.out.println("Enter item name:");
+        String newName = input.next();
+
+        System.out.println("Enter item description:");
+        String newDesc = input.next();
+
+        System.out.println("Enter item value:");
+        int newVal = Integer.parseInt(input.next());
+
+        items.add(new Item(newName, newDesc, newVal));
+        System.out.println("Done");
+        pressAnyKeyToContinue();
+    }
+
+    private boolean isBack(String input) {
+        return input.equals("back");
     }
 
     private void selectMode() {
