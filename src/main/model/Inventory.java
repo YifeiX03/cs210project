@@ -126,6 +126,20 @@ public class Inventory {
         return -1;
     }
 
+    //REQUIRES: amount must be positive
+    //MODIFIES: this
+    //EFFECTS: adds given amount of coins
+    public void addCoins(int amount) {
+        coins += amount;
+    }
+
+    //REQUIRES: amount must be positive
+    //MODIFIES: this
+    //EFFECTS: removes given amount of coins
+    public void removeCoins(int amount) {
+        coins -= amount;
+    }
+
     public ArrayList<Slot> getSlots() {
         return slots;
     }

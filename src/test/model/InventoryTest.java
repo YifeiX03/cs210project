@@ -135,4 +135,17 @@ class InventoryTest {
         inventory.removeItem(apple, 4);
         assertEquals(1, inventory.getTotalItems());
     }
+
+    @Test
+    public void coinsTest() {
+        assertEquals(0, inventory.getCoins());
+        inventory.addCoins(10);
+        assertEquals(10, inventory.getCoins());
+        inventory.addCoins(5);
+        assertEquals(15, inventory.getCoins());
+        inventory.removeCoins(7);
+        assertEquals(8, inventory.getCoins());
+        inventory.removeCoins(2);
+        assertEquals(6, inventory.getCoins());
+    }
 }

@@ -25,11 +25,11 @@ import java.util.Scanner;
 public class InventoryApp {
     private Inventory inventory;
     private Inventory selection;
+    private Inventory items;
     private Scanner input;
     private Boolean running;
     private Boolean runningInventory;
-
-    private ArrayList<Item> items;
+    private Boolean runningSelection;
 
     //EFFECTS: runs the inventory application
     public InventoryApp() {
@@ -55,34 +55,31 @@ public class InventoryApp {
         System.out.println("Give me a good grade please.");
     }
 
-
-    //MODIFIES: this
-    //EFFECTS: creates the items that can be added to inventory
-    private void createItems() {
-        items.add(new Item("Grasshopper Legs",
-                "Legs of a grasshopper, yum",
-                2));
-        items.add(new Item("Spider Eyes",
-                "Eyes of a spider, not so yum",
-                1));
-    }
-
     //MODIFIES: this
     //EFFECTS: initializes the inventory, selection, and input system
     private void initialize() {
         inventory = new Inventory();
         selection = new Inventory();
+        items = new Inventory();
         input = new Scanner(System.in);
         input.useDelimiter("\n");
+    }
 
-        items = new ArrayList<Item>();
+
+    //MODIFIES: this
+    //EFFECTS: creates the items that can be added to inventory
+    private void createItems() {
+        items.addItem(new Item("Grasshopper Legs", "Legs of a grasshopper, yum", 2), 9999);
+
+        items.addItem(new Item("Spider Eyes", "Eyes of a spider, not so yum", 1), 9999);
     }
 
     //EFFECTS: shows menu to user
     private void showMenu() {
         displayInventory(inventory,"inventory");
-        System.out.println();
+        System.out.println("Items that have been made:");
         displayItems(items);
+        displayCoins();
         System.out.println("\nWhat do you want to do?\n");
         System.out.println("\tInteract with Inventory (I)");
         System.out.println("\tMake a new item (M)");
@@ -91,7 +88,7 @@ public class InventoryApp {
     }
 
     //MODIFIES: this
-    //EFFECTS:processes user command
+    //EFFECTS:processes user command involving main menu
     private void processCommand(String input) {
         switch (input) {
             case "I":
@@ -129,23 +126,27 @@ public class InventoryApp {
         enterInventoryMenu();
     }
 
-    //EFFECTS: shows the amount and items in given inventory
+    private void displayCoins() {
+        System.out.println("You have " + inventory.getCoins() + " Coins");
+    }
+
+    //EFFECTS: shows total value and total items
     private void displayInventory(Inventory inventory, String name) {
         System.out.println(name + " has " + inventory.getTotalItems() + " Items");
         System.out.println(name + " has value of " + inventory.getTotalValue() + "");
-        System.out.println("Items in " + name + ":");
 
-        for (Slot slot : inventory.getSlots()) {
-            System.out.println(slot.getAmount() +  " x " +  slot.getItem().getName());
+        if (inventory.length() != 0) {
+            System.out.println("Items in " + name + ":");
+            for (Slot slot : inventory.getSlots()) {
+                System.out.println(slot.getAmount() + " x " + slot.getItem().getName());
+            }
         }
     }
 
-    //EFFECTS: shows items in given list
-    private void displayItems(ArrayList<Item> items) {
-        System.out.println("Items that can be added: ");
-
-        for (Item item : items) {
-            System.out.println(item.getName());
+    //EFFECTS: shows the amount of items in given inventory
+    private void displayItems(Inventory inventory) {
+        for (Slot slot : inventory.getSlots()) {
+            System.out.println(slot.getAmount() + " x " + slot.getItem().getName());
         }
     }
 
@@ -174,14 +175,14 @@ public class InventoryApp {
     }
 
     //MODIFIES: this
-    //EFFECTS:processes user command
+    //EFFECTS:processes user command involving inventory
     private void processInventoryCommand(String input) {
         switch (input) {
             case "A":
-                addToInventory();
+                addToInventory(items, inventory);
                 break;
             case "R":
-                removeFromInventory();
+                removeFromInventory(items, inventory, "inventory");
                 break;
             case "I":
                 inspectItem();
@@ -196,19 +197,17 @@ public class InventoryApp {
 
     //MODIFIES: this
     //EFFECTS: choose items to add to inventory
-    private void addToInventory() {
+    private void addToInventory(Inventory source, Inventory receiver) {
         boolean choosing = true;
         while (choosing) {
             System.out.println("Available items to choose from:");
-            for (Item item : items) {
-                System.out.println(item.getName());
-            }
+            displayItems(source);
             System.out.println("Type the name of the item you want to add, or type 'back' to go back");
             String choice = input.next();
             if (choice.equals("back")) {
                 break;
             } else {
-                boolean found = addingItem(items, choice);
+                boolean found = addingItem(source, receiver, choice);
                 if (found) {
                     choosing = false;
                 } else {
@@ -221,12 +220,13 @@ public class InventoryApp {
     //MODIFIES: this
     //EFFECTS: finds the item, and lets the user choose how many to add
     //         returns true if item is found
-    private boolean addingItem(ArrayList<Item> items, String choice) {
-        for (Item item : items) {
-            if (item.getName().equals(choice)) {
+    private boolean addingItem(Inventory source, Inventory receiver, String choice) {
+        for (Slot slot : source.getSlots()) {
+            if (slot.getItem().getName().equals(choice)) {
                 System.out.println("How many?");
                 int amount = Integer.parseInt(input.next());
-                inventory.addItem(item, amount);
+                receiver.addItem(slot.getItem(), amount);
+                source.removeItem(slot.getItem(), amount);
                 return true;
             }
         }
@@ -235,16 +235,16 @@ public class InventoryApp {
 
     //MODIFIES: this
     //EFFECTS: choose items to remove from inventory
-    private void removeFromInventory() {
+    private void removeFromInventory(Inventory source, Inventory receiver, String name) {
         boolean choosing = true;
         while (choosing) {
-            displayInventory(inventory, "inventory");
+            displayInventory(receiver, name);
             System.out.println("Type the name of the item you want to remove, or type 'back' to go back");
             String choice = input.next();
             if (choice.equals("back")) {
                 break;
             } else {
-                boolean found = removingItem(inventory, choice);
+                boolean found = removingItem(source, receiver, choice);
                 if (found) {
                     choosing = false;
                 } else {
@@ -257,12 +257,13 @@ public class InventoryApp {
     //MODIFIES: this
     //EFFECTS: finds the item, and lets the user choose how many to remove
     //         returns true if item is found
-    private boolean removingItem(Inventory inventory, String choice) {
-        for (Slot slot : inventory.getSlots()) {
+    private boolean removingItem(Inventory source, Inventory receiver, String choice) {
+        for (Slot slot : receiver.getSlots()) {
             if (slot.getItem().getName().equals(choice)) {
                 System.out.println("How many?");
                 int amount = Integer.parseInt(input.next());
-                inventory.removeItem(slot.getItem(), amount);
+                receiver.removeItem(slot.getItem(), amount);
+                source.addItem(slot.getItem(), amount);
                 return true;
             }
         }
@@ -307,7 +308,6 @@ public class InventoryApp {
     //MODIFIES: this
     //EFFECTS: lets the user make a new item
     private void makeItem() {
-        displayItems(items);
         System.out.println();
         System.out.println("Enter new item name:");
         String newName = input.next();
@@ -318,7 +318,7 @@ public class InventoryApp {
         System.out.println("Enter new item value:");
         int newVal = Integer.parseInt(input.next());
 
-        items.add(new Item(newName, newDesc, newVal));
+        items.addItem(new Item(newName, newDesc, newVal), 9999);
         System.out.println("Done");
         pressAnyKeyToContinue();
     }
@@ -327,5 +327,53 @@ public class InventoryApp {
     private void selectMode() {
         System.out.println("Entering selection mode");
 
+        runningSelection = true;
+        String selectionCommand = null;
+
+        while (runningSelection) {
+            showSelectionMenu();
+            selectionCommand = input.next();
+            selectionCommand = selectionCommand.toUpperCase();
+            processSelectionCommand(selectionCommand);
+        }
+
     }
+
+    //EFFECTS: shows selection menu
+    private void showSelectionMenu() {
+        displayInventory(selection, "selection");
+        System.out.println("\nAvailable Commands");
+        System.out.println("\tSelect Items from Inventory (S)");
+        System.out.println("\tRemove Selections (R)");
+        System.out.println("\tSell all items in Selection ($)");
+        System.out.println("\tGo back (B)");
+    }
+
+    //MODIFIES: this
+    //EFFECTS: processes user command involving selection
+    private void processSelectionCommand(String input) {
+        switch (input) {
+            case "S":
+                addToInventory(inventory, selection);
+                break;
+            case "R":
+                removeFromInventory(inventory, selection, "selection");
+                break;
+            case "$":
+                sellInventory(inventory, selection);
+            case "B":
+                runningSelection = false;
+                break;
+            default:
+                System.out.println("Invalid Command\n");
+        }
+    }
+
+    //MODIFIES: this
+    //EFFECTS: sells selected items from source inventory
+    private void sellInventory(Inventory source, Inventory selection) {
+        source.addCoins(selection.getTotalValue());
+        selection.getSlots().clear();
+    }
+
 }
