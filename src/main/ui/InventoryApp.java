@@ -43,7 +43,7 @@ public class InventoryApp {
             processCommand(command);
         }
 
-        System.out.println("Give me a good grade please.");
+        System.out.println("Exiting... please give me a good grade. :)");
     }
 
     //MODIFIES: this
@@ -65,11 +65,13 @@ public class InventoryApp {
         items.addItem(new Item("Spider Eyes", "Eyes of a spider, not so yum", 1), 9999);
     }
 
-    //EFFECTS: shows menu to user
+    //EFFECTS: shows main menu to user
     private void showMenu() {
         displayInventory(inventory,"inventory");
+        System.out.println();
         System.out.println("Items that have been made:");
         displayItems(items);
+        System.out.println();
         displayCoins();
         System.out.println("\nWhat do you want to do?\n");
         System.out.println("\tInteract with Inventory (I)");
@@ -129,9 +131,7 @@ public class InventoryApp {
 
         if (inventory.length() != 0) {
             System.out.println("Items in " + name + ":");
-            for (Slot slot : inventory.getSlots()) {
-                System.out.println(slot.getAmount() + " x " + slot.getItem().getName());
-            }
+            displayItems(inventory);
         }
     }
 
@@ -188,7 +188,7 @@ public class InventoryApp {
     }
 
     //MODIFIES: this
-    //EFFECTS: choose items to add to inventory
+    //EFFECTS: choose items to add to given inventory from source inventory
     private void addToInventory(Inventory source, Inventory receiver) {
         boolean choosing = true;
         while (choosing) {
@@ -211,7 +211,8 @@ public class InventoryApp {
 
     //MODIFIES: this
     //EFFECTS: finds the item, and lets the user choose how many to add
-    //         returns true if item is found
+    //         then takes item from source inventory, and adds it to receiver inventory
+    //         returns true if item is found, else false
     private boolean addingItem(Inventory source, Inventory receiver, String choice) {
         for (Slot slot : source.getSlots()) {
             if (slot.getItem().getName().equals(choice)) {
@@ -226,7 +227,7 @@ public class InventoryApp {
     }
 
     //MODIFIES: this
-    //EFFECTS: choose items to remove from inventory
+    //EFFECTS: choose items to remove from given inventory and returns it back to the source
     private void removeFromInventory(Inventory source, Inventory receiver, String name) {
         boolean choosing = true;
         while (choosing) {
@@ -248,7 +249,8 @@ public class InventoryApp {
 
     //MODIFIES: this
     //EFFECTS: finds the item, and lets the user choose how many to remove
-    //         returns true if item is found
+    //         then removes it from the given inventory, and returns it to source inventory
+    //         returns true if item is found, else false
     private boolean removingItem(Inventory source, Inventory receiver, String choice) {
         for (Slot slot : receiver.getSlots()) {
             if (slot.getItem().getName().equals(choice)) {
@@ -283,7 +285,7 @@ public class InventoryApp {
     }
 
     //EFFECTS: finds the item, and displays name, description, and value
-    //         returns true if item is found
+    //         returns true if item is found, else false
     private boolean inspectingItem(Inventory inventory, String choice) {
         for (Slot slot : inventory.getSlots()) {
             if (slot.getItem().getName().equals(choice)) {
@@ -353,6 +355,7 @@ public class InventoryApp {
                 break;
             case "$":
                 sellInventory(inventory, selection);
+                break;
             case "B":
                 runningSelection = false;
                 break;
@@ -362,10 +365,13 @@ public class InventoryApp {
     }
 
     //MODIFIES: this
-    //EFFECTS: sells selected items from source inventory
+    //EFFECTS: sells selected items from source inventory, then leaves selection mode
     private void sellInventory(Inventory source, Inventory selection) {
         source.addCoins(selection.getTotalValue());
+        System.out.println("Selected items sold for " + selection.getTotalValue() + "\n");
         selection.getSlots().clear();
+        runningSelection = false;
+        pressAnyKeyToContinue();
     }
 
 }
