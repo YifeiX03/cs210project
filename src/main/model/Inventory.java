@@ -37,39 +37,10 @@ public class Inventory {
         }
     }
 
-//    //REQUIRES: item must be an item that exists in inventory
-//    //          count must be less than or equal to amount of that item stored
-//    //MODIFIES: this
-//    //EFFECTS: selects given amount of an item from inventory
-//    public void select(Item item, int count) {
-//        //stub
-//    }
-//
-//    //EFFECTS: returns the collective value of all selected items
-//    public int inspectSelectedValue() {
-//        return 0;
-//    }
-//
-//    //EFFECTS: deselects all items selected
-//    public void deselectAll() {
-//        //stub
-//    }
-
     //EFFECTS: returns amount of slots in inventory
     public int length() {
         return slots.size();
     }
-
-//    //EFFECTS: returns total amount of every item in inventory
-//    public int inventorySize() {
-//        return 0;
-//    }
-
-//    //REQUIRES: slot number is less than inventory size
-//    //EFFECTS: returns the item at the slot number
-//    public Item getItemFromSlot(int position) {
-//        return new Item("Test", "TESTING", 0);
-//    }
 
     //EFFECTS: returns true if inventory contains item, else false
     public boolean contains(Item item) {
@@ -147,15 +118,4 @@ public class Inventory {
     public int getCoins() {
         return coins;
     }
-
-//    public void test() {
-//        ArrayList<String> tester = new ArrayList<String>();
-//        for (Slot slot : slots) {
-//            tester.add(slot.getItem().getName());
-//        }
-//    }
-
-//    public ArrayList<Slot> getSelection() {
-//        return selection;
-//    }
 }
