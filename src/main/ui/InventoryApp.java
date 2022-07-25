@@ -4,6 +4,7 @@ import model.Inventory;
 import model.Item;
 import model.Slot;
 
+import javax.management.remote.rmi._RMIConnection_Stub;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
@@ -79,6 +80,9 @@ public class InventoryApp {
 
     //EFFECTS: shows menu to user
     private void showMenu() {
+        displayInventory(inventory,"inventory");
+        System.out.println();
+        displayItems(items);
         System.out.println("\nWhat do you want to do?\n");
         System.out.println("\tInteract with Inventory (I)");
         System.out.println("\tMake a new item (M)");
@@ -136,6 +140,15 @@ public class InventoryApp {
         }
     }
 
+    //EFFECTS: shows items in given list
+    private void displayItems(ArrayList<Item> items) {
+        System.out.println("Items that can be added: ");
+
+        for (Item item : items) {
+            System.out.println(item.getName());
+        }
+    }
+
     //MODIFIES: this
     //EFFECTS: enters inventory menu, allows for adding, removing, and inspecting of items
     private void enterInventoryMenu() {
@@ -152,6 +165,7 @@ public class InventoryApp {
 
     //EFFECTS: displays menu for inventory interaction
     private void showInventoryMenu() {
+        displayInventory(inventory, "inventory");
         System.out.println("\nWhat do you want to do in your inventory?\n");
         System.out.println("\tAdd items (A)");
         System.out.println("\tRemove Items (R)");
@@ -293,14 +307,15 @@ public class InventoryApp {
     //MODIFIES: this
     //EFFECTS: lets the user make a new item
     private void makeItem() {
-//        System.out.println("Enter 'back' at any time to go back");
-        System.out.println("Enter item name:");
+        displayItems(items);
+        System.out.println();
+        System.out.println("Enter new item name:");
         String newName = input.next();
 
-        System.out.println("Enter item description:");
+        System.out.println("Enter new item description:");
         String newDesc = input.next();
 
-        System.out.println("Enter item value:");
+        System.out.println("Enter new item value:");
         int newVal = Integer.parseInt(input.next());
 
         items.add(new Item(newName, newDesc, newVal));
@@ -308,17 +323,9 @@ public class InventoryApp {
         pressAnyKeyToContinue();
     }
 
-    private Item findItemWithName(String name, Inventory inventory) {
-        for (Slot slot : inventory.getSlots()) {
-            if (slot.getItem().getName().equals(name)) {
-                return slot.getItem();
-            }
-        }
-        return null;
-    }
-
     //EFFECTS: enters select mode
     private void selectMode() {
         System.out.println("Entering selection mode");
+
     }
 }
