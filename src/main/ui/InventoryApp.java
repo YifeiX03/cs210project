@@ -357,7 +357,7 @@ public class InventoryApp {
                 sellInventory(inventory, selection);
                 break;
             case "B":
-                runningSelection = false;
+                leaveSelection();
                 break;
             default:
                 System.out.println("Invalid Command\n");
@@ -372,6 +372,13 @@ public class InventoryApp {
         selection.getSlots().clear();
         runningSelection = false;
         pressAnyKeyToContinue();
+    }
+
+    private void leaveSelection() {
+        for (Slot slot : selection.getSlots()) {
+            inventory.addItem(slot.getItem(), slot.getAmount());
+        }
+        runningSelection = false;
     }
 
 }
