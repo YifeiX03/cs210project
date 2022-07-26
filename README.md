@@ -29,3 +29,6 @@ This project is of interest to me because I want to create games, and in most ga
 - As a user, I want to be able to inspect items: look at names, descriptions, and values
 - As a user, I want the inventory to display the names of all items and amount of individual items
 - As a user, I want to be able to select multiple items and see their collective value
+- As a user, I want to be able to save my items made and inventory to file (but selected items should go back to the inventory if not sold)
+- As a user, I want to be able to load my items made and inventory from file
+- As a user, I want the program to ask me if I want to save before exiting
