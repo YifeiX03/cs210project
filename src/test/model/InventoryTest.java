@@ -13,13 +13,14 @@ class InventoryTest {
 
     @BeforeEach
     public void setUp() {
-        inventory = new Inventory();
+        inventory = new Inventory("test");
         apple = new Item("apple", "ordinary apple", 10);
         pear = new Item("pear", "unordinary pear", 1000);
     }
 
     @Test
     public void constructorTest() {
+        assertEquals("test", inventory.getName());
         assertEquals(0, inventory.length());
         assertEquals(0, inventory.getCoins());
     }

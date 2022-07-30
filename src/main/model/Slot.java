@@ -1,6 +1,11 @@
 package model;
 
+import org.json.JSONObject;
+
 // represents a slot in the inventory, storing an item and the amount of the item
+
+// toJson() method based off of JSON Serialization Demo; Link below
+// https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
 public class Slot {
     private Item item;
     private int amount;
@@ -43,5 +48,13 @@ public class Slot {
 
     public int getAmount() {
         return amount;
+    }
+
+    // EFFECTS: returns this slot as a JSON object
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("item", item.toJson());
+        json.put("amount", amount);
+        return json;
     }
 }

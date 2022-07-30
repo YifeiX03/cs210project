@@ -1,0 +1,12 @@
+{
+    "slots": [{
+        "item": {
+            "name": "Grasshopper Legs",
+            "description": "Legs of a grasshopper, yum",
+            "value": 2
+        },
+        "amount": 20
+    }],
+    "coins": 0,
+    "name": "main"
+}

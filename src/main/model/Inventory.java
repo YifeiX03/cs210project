@@ -2,13 +2,21 @@ package model;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 //represents an inventory, an arraylist of slots and a count of total amount of coins
+
+// toJson() method based off of JSON Serialization Demo; Link below
+// https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
 public class Inventory {
+    private String name;
     private ArrayList<Slot> slots;
     private int coins;
 
     //EFFECTS: creates an empty inventory with no coins
-    public Inventory() {
+    public Inventory(String name) {
+        this.name = name;
         slots = new ArrayList<Slot>();
         coins = 0;
     }
@@ -111,11 +119,35 @@ public class Inventory {
         coins -= amount;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public ArrayList<Slot> getSlots() {
         return slots;
     }
 
     public int getCoins() {
         return coins;
+    }
+
+    // EFFECTS: returns this inventory as a JSON object
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("slots", slotsToJson());
+        json.put("coins", coins);
+        return json;
+    }
+
+    // EFFECTS: returns slots as a JSON array
+    private JSONArray slotsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Slot slot : slots) {
+            jsonArray.put(slot.toJson());
+        }
+
+        return jsonArray;
     }
 }

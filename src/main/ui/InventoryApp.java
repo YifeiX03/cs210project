@@ -4,15 +4,21 @@ import model.Inventory;
 import model.Item;
 import model.Slot;
 
-import javax.management.remote.rmi._RMIConnection_Stub;
-import java.util.ArrayList;
-import java.util.Locale;
+import persistence.JsonWriter;
+import persistence.JsonReader;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import java.util.Scanner;
 
 // Inventory Application
 
 //based on Teller app; link below
 //https://github.students.cs.ubc.ca/CPSC210/TellerApp.git
+
+// Persistence methods (saveFile() and loadFile()) based off of JSON serialization demo; link below:
+// https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
 public class InventoryApp {
     private Inventory inventory;
     private Inventory selection;
@@ -21,6 +27,12 @@ public class InventoryApp {
     private Boolean running;
     private Boolean runningInventory;
     private Boolean runningSelection;
+
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+
+    private static final String INVENTORY_STORE = "./data/inventory.json";
+    private static final String ITEMS_STORE = "./data/items.json";
 
     //EFFECTS: runs the inventory application
     public InventoryApp() {
@@ -49,11 +61,14 @@ public class InventoryApp {
     //MODIFIES: this
     //EFFECTS: initializes the inventory, selection, and input system
     private void initialize() {
-        inventory = new Inventory();
-        selection = new Inventory();
-        items = new Inventory();
+        inventory = new Inventory("main");
+        selection = new Inventory("selection");
+        items = new Inventory("items");
         input = new Scanner(System.in);
         input.useDelimiter("\n");
+
+//        jsonWriter = new JsonWriter(INVENTORY_STORE);
+//        jsonReader = new JsonReader();
     }
 
 
@@ -77,6 +92,8 @@ public class InventoryApp {
         System.out.println("\tInteract with Inventory (I)");
         System.out.println("\tMake a new item (M)");
         System.out.println("\tSelect items in inventory (S)");
+        System.out.println("\tSave (save)");
+        System.out.println("\tLoad (load)");
         System.out.println("\tQuit (Q)");
     }
 
@@ -92,6 +109,12 @@ public class InventoryApp {
                 break;
             case "S":
                 selectMode();
+                break;
+            case "SAVE":
+                saveFile();
+                break;
+            case "LOAD":
+                loadFile();
                 break;
             case "Q":
                 running = false;
@@ -374,11 +397,48 @@ public class InventoryApp {
         pressAnyKeyToContinue();
     }
 
+    //MODIFIES: this
+    //EFFECTS: removes items in selection when leaving the selection menu
     private void leaveSelection() {
         for (Slot slot : selection.getSlots()) {
             inventory.addItem(slot.getItem(), slot.getAmount());
         }
         runningSelection = false;
+    }
+
+    // EFFECTS: saves inventory and made items to file
+    private void saveFile() {
+        try {
+            jsonWriter = new JsonWriter(INVENTORY_STORE);
+            jsonWriter.open();
+            jsonWriter.write(inventory);
+            jsonWriter.close();
+            jsonWriter = new JsonWriter(ITEMS_STORE);
+            jsonWriter.open();
+            jsonWriter.write(items);
+            jsonWriter.close();
+            System.out.println("Saved successfully");
+            pressAnyKeyToContinue();
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file");
+            pressAnyKeyToContinue();
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads inventory and made items from file
+    private void loadFile() {
+        try {
+            jsonReader = new JsonReader(INVENTORY_STORE);
+            inventory = jsonReader.read();
+            jsonReader = new JsonReader(ITEMS_STORE);
+            items = jsonReader.read();
+            System.out.println("Load Successful");
+            pressAnyKeyToContinue();
+        } catch (IOException e) {
+            System.out.println("Unable to load");
+            pressAnyKeyToContinue();
+        }
     }
 
 }

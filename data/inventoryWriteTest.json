@@ -1,0 +1,22 @@
+{
+    "slots": [
+        {
+            "item": {
+                "name": "Ball",
+                "description": "Bouncy",
+                "value": 2
+            },
+            "amount": 20
+        },
+        {
+            "item": {
+                "name": "Cube",
+                "description": "CUBE-Y",
+                "value": 10
+            },
+            "amount": 45
+        }
+    ],
+    "coins": 12,
+    "name": "test"
+}
