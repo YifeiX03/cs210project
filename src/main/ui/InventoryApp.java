@@ -66,9 +66,6 @@ public class InventoryApp {
         items = new Inventory("items");
         input = new Scanner(System.in);
         input.useDelimiter("\n");
-
-//        jsonWriter = new JsonWriter(INVENTORY_STORE);
-//        jsonReader = new JsonReader();
     }
 
 
