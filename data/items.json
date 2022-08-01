@@ -6,7 +6,7 @@
                 "description": "Legs of a grasshopper, yum",
                 "value": 2
             },
-            "amount": 9979
+            "amount": 9999
         },
         {
             "item": {
@@ -15,6 +15,14 @@
                 "value": 1
             },
             "amount": 9999
+        },
+        {
+            "item": {
+                "name": "Gunboots",
+                "description": "Boots with guns",
+                "value": 12
+            },
+            "amount": 9909
         }
     ],
     "coins": 0,

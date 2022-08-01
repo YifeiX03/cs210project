@@ -1,11 +1,11 @@
 {
     "slots": [{
         "item": {
-            "name": "Grasshopper Legs",
-            "description": "Legs of a grasshopper, yum",
-            "value": 2
+            "name": "Gunboots",
+            "description": "Boots with guns",
+            "value": 12
         },
-        "amount": 20
+        "amount": 90
     }],
     "coins": 0,
     "name": "main"

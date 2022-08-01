@@ -53,7 +53,7 @@ public class Inventory {
     //EFFECTS: returns true if inventory contains item, else false
     public boolean contains(Item item) {
         for (Slot slot : slots) {
-            if (slot.getItem() == item) {
+            if (slot.getItem().equals(item)) {
                 return true;
             }
         }
@@ -87,7 +87,7 @@ public class Inventory {
     //         if item is not found return null
     public Slot findItem(Item item) {
         for (Slot slot : slots) {
-            if (slot.getItem() == item) {
+            if (slot.getItem().equals(item)) {
                 return slot;
             }
         }

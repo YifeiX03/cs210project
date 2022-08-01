@@ -117,11 +117,23 @@ public class InventoryApp {
                 loadFile();
                 break;
             case "Q":
-                running = false;
+                quitmain();
                 break;
             default:
                 System.out.println("Invalid Command\n");
         }
+    }
+
+    //MODIFIES: this
+    //EFFECTS: asks the user if they want to save, then quits the program
+    private void quitmain() {
+        System.out.println("Do you want to save before quitting? (Y/N)");
+        String quitCommand = input.next();
+        quitCommand = quitCommand.toUpperCase();
+        if (quitCommand.equals("Y")) {
+            saveFile();
+        }
+        running = false;
     }
 
     //EFFECTS: pauses the program and waits for user input to continue
