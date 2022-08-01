@@ -6,7 +6,7 @@
                 "description": "Legs of a grasshopper, yum",
                 "value": 2
             },
-            "amount": 9999
+            "amount": 9949
         },
         {
             "item": {
@@ -14,7 +14,7 @@
                 "description": "Eyes of a spider, not so yum",
                 "value": 1
             },
-            "amount": 9999
+            "amount": 9995
         },
         {
             "item": {
@@ -23,6 +23,14 @@
                 "value": 12
             },
             "amount": 9909
+        },
+        {
+            "item": {
+                "name": "Christmas Crackers",
+                "description": "Festive crackers",
+                "value": 5
+            },
+            "amount": 9999
         }
     ],
     "coins": 0,

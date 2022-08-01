@@ -1,12 +1,30 @@
 {
-    "slots": [{
-        "item": {
-            "name": "Gunboots",
-            "description": "Boots with guns",
-            "value": 12
+    "slots": [
+        {
+            "item": {
+                "name": "Gunboots",
+                "description": "Boots with guns",
+                "value": 12
+            },
+            "amount": 80
         },
-        "amount": 90
-    }],
-    "coins": 0,
+        {
+            "item": {
+                "name": "Grasshopper Legs",
+                "description": "Legs of a grasshopper, yum",
+                "value": 2
+            },
+            "amount": 50
+        },
+        {
+            "item": {
+                "name": "Spider Eyes",
+                "description": "Eyes of a spider, not so yum",
+                "value": 1
+            },
+            "amount": 4
+        }
+    ],
+    "coins": 120,
     "name": "main"
 }
