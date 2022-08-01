@@ -44,6 +44,7 @@ public class Item {
     }
 
     @Override
+    // EFFECTS: returns true if given object has same name, description, and value, else false
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -56,6 +57,7 @@ public class Item {
     }
 
     @Override
+    // EFFECTS: generates hash code based off of item's name, description, and value
     public int hashCode() {
         return Objects.hash(name, description, value);
     }
