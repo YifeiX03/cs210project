@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// based off of JSON serialization Demo; link below:
+// based off of JsonWriterTest from JSON serialization Demo; link below:
 // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
 public class JsonWriterTest extends JsonTest{
     private Item ball = new Item(ballName, ballDesc, ballVal);

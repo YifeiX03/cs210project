@@ -17,7 +17,7 @@ import java.util.Scanner;
 //based on Teller app; link below
 //https://github.students.cs.ubc.ca/CPSC210/TellerApp.git
 
-// Persistence methods (saveFile() and loadFile()) based off of JSON serialization demo; link below:
+// Persistence methods (saveFile() and loadFile()) based off of WorkRoomApp from JSON serialization demo; link below:
 // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
 public class InventoryApp {
     private Inventory inventory;
