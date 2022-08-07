@@ -5,8 +5,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import model.Inventory;
 import model.Item;
@@ -106,6 +104,17 @@ public class GUI extends JFrame implements ActionListener {
         interactionPanel.setVisible(true);
         interactionPanel.setBounds(WIDTH / 4, 0, WIDTH * 3 / 4, HEIGHT / 2);
         interactionPanel.setBackground(new Color(0, 0, 0));
+
+        ImageIcon imgIcon = new ImageIcon("./data/Capybara_portrait.jpg");
+        Image img = imgIcon.getImage();
+        Image imgScale = img.getScaledInstance(interactionPanel.getWidth(),
+                interactionPanel.getHeight(),
+                Image.SCALE_DEFAULT);
+        ImageIcon imgScaled = new ImageIcon(imgScale);
+
+        JLabel imageLabel = new JLabel(imgScaled);
+        interactionPanel.add(imageLabel);
+
         this.add(interactionPanel);
     }
 
