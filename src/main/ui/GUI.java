@@ -5,10 +5,16 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 
 import model.Inventory;
 import model.Item;
 import model.Slot;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
 // IMPORTANT: DOCUMENT METHODS WHEN YOU ARE DONE
 
@@ -19,9 +25,23 @@ import model.Slot;
 // Clicking on buttons in the menu, choosing items by typing name in pop-up window?
 // Add some sort of visual component, maybe show a capybara on start up and quit?
 
+// TODO: adding stuff
+// TODO: removing stuff
+// TODO: inspecting stuff
+
+// TODO: documentation
+
+// save and load are done
+// capybara image
+
 public class GUI extends JFrame implements ActionListener {
     private static final int HEIGHT = 800;
     private static final int WIDTH = 800;
+
+    private static final String INVENTORY_STORE = "./data/guiInventory.json";
+
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     private JPanel menuPanel;
     private JPanel inventoryPanel;
@@ -34,10 +54,13 @@ public class GUI extends JFrame implements ActionListener {
     private JPanel inspectPanel;
 
     private Inventory inventory;
+    private List<Item> itemShop;
 
+    //EFFECTS: initializes components and runs the gui
     public GUI() {
         super("aaaaaaaaaaaaaaaaa");
         initializeInventory();
+        initializeItemShop();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setLayout(null);
@@ -50,6 +73,9 @@ public class GUI extends JFrame implements ActionListener {
         setResizable(false);
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes the menu panel, the add, remove, inspect, save, and load options are added to the
+    //          left side of the screen
     private void initializeMenuPanel() {
         menuPanel = new JPanel();
         menuPanel.setBackground(new Color(157, 157, 212));
@@ -73,6 +99,8 @@ public class GUI extends JFrame implements ActionListener {
         menuPanel.setVisible(true);
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes inventory panel, items in inventory and count is shown in the bottom of the screen
     private void initializeInventoryPanel() {
         inventoryPanel = new JPanel();
         inventoryPanel.setBackground(new Color(149, 182, 142));
@@ -95,6 +123,9 @@ public class GUI extends JFrame implements ActionListener {
         inventoryPanel.setVisible(true);
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes the interaction panel, adding, removing, and inspecting items will be done in this panel
+    //          also shows an image of a capybara when the program is started
     private void initializeInteractionPanel() {
         interactionPanel = new JPanel();
         initializeAddPanel();
@@ -118,6 +149,8 @@ public class GUI extends JFrame implements ActionListener {
         this.add(interactionPanel);
     }
 
+    // EFFECTS: creates an inventory panel, a panel to be used in the interaction panel
+    //          returns the created panel
     private JPanel createInventoryPanel() {
         JPanel panel = new JPanel();
         panel.setVisible(true);
@@ -126,6 +159,8 @@ public class GUI extends JFrame implements ActionListener {
         return panel;
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates the add panel, panel that allows for user to add stuff to inventory
     private void initializeAddPanel() {
         addPanel = createInventoryPanel();
         addPanel.setBackground(new Color(193, 149, 206));
@@ -134,6 +169,8 @@ public class GUI extends JFrame implements ActionListener {
         addPanel.add(adding);
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates the remove panel, panel that allows for user to remove stuff from inventory
     private void initializeRemovePanel() {
         removePanel = createInventoryPanel();
         removePanel.setBackground(new Color(18, 61, 56));
@@ -142,6 +179,8 @@ public class GUI extends JFrame implements ActionListener {
         removePanel.add(removing);
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates the inspect panel, panel that allows for user to inspect items in inventory
     private void intializeInspectPanel() {
         inspectPanel = createInventoryPanel();
         inspectPanel.setBackground(new Color(194, 165, 94));
@@ -150,6 +189,8 @@ public class GUI extends JFrame implements ActionListener {
         inspectPanel.add(inspecting);
     }
 
+    // MODIFIES: this
+    // EFFECTS: switches the interaction panel to the chosen panel
     private void switchToPanel(JPanel chosenPanel) {
         interactionPanel.removeAll();
         interactionPanel.add(chosenPanel);
@@ -157,13 +198,18 @@ public class GUI extends JFrame implements ActionListener {
         interactionPanel.revalidate();
     }
 
+    // MODIFIES: textArea
+    // EFFECTS: displays given inventory inside of the given text area
     private void showInventory(JTextArea textArea, Inventory inventory) {
+        textArea.setText("");
         for (Slot slot : inventory.getSlots()) {
             textArea.append(slot.getAmount() + " * " + slot.getItem().getName());
             textArea.append("\n");
         }
     }
 
+    // EFFECTS: creates a new button with given text, command, and action listener
+    //          then returns the new button
     private JButton makeButton(String text, String command, ActionListener al) {
         JButton btn = new JButton(text);
         btn.setActionCommand(command);
@@ -171,12 +217,25 @@ public class GUI extends JFrame implements ActionListener {
         return btn;
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes the inventory
     private void initializeInventory() {
         inventory = new Inventory("Items");
         inventory.addItem(new Item("test", "cool", 10), 20);
         inventory.addItem(new Item("wow", "neato", 1), 5);
+        inventory.addItem(new Item("neato", "pretty cool huh?", 50), 120);
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes the item shop
+    private void initializeItemShop() {
+        itemShop = new ArrayList<>();
+        itemShop.add(new Item("Awesome Possum", "Possum that is awesome", 500));
+        itemShop.add(new Item("MR KRABS", "From Sponge Bob Square Pants", 10));
+    }
+
+    // MODIFIES: this
+    // EFFECTS: listens to commands given out by the buttons and runs the correct method
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("addScreen")) {
             switchToPanel(addPanel);
@@ -197,42 +256,31 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
+    // EFFECTS: saves the inventory to file
     private void save() {
         System.out.println("Saving...");
+        try {
+            jsonWriter = new JsonWriter(INVENTORY_STORE);
+            jsonWriter.open();
+            jsonWriter.write(inventory);
+            jsonWriter.close();
+            System.out.println("Saved successfully");
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file");
+        }
     }
 
+    // MODIFIES: this
+    // EFFECTS: loads inventory
     private void load() {
         System.out.println("Loading...");
+        try {
+            jsonReader = new JsonReader(INVENTORY_STORE);
+            inventory = jsonReader.read();
+            showInventory(inventoryDisplay, inventory);
+            System.out.println("Load Successful");
+        } catch (IOException e) {
+            System.out.println("Unable to load");
+        }
     }
-
-//    public void actionPerformed(ActionEvent e) {
-//        switch (e.getActionCommand()) {
-//            case "addScreen":
-//                switchToPanel(addPanel);
-//                break;
-//            case "addItem":
-//                System.out.println("Adding...");
-//                break;
-//            case "removeScreen":
-//                switchToPanel(removePanel);
-//                break;
-//            case "removeItem":
-//                System.out.println("Removing...");
-//                break;
-//            case "inspectScreen":
-//                switchToPanel(inspectPanel);
-//                break;
-//            case "inspectItem":
-//                System.out.println("Inspecting...");
-//                break;
-//            case "save":
-//                System.out.println("Saving...");
-//                break;
-//            case "load":
-//                System.out.println("Loading...");
-//                break;
-//            default:
-//                break;
-//        }
-//    }
 }

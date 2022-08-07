@@ -1,0 +1,22 @@
+{
+    "slots": [
+        {
+            "item": {
+                "name": "test",
+                "description": "cool",
+                "value": 10
+            },
+            "amount": 20
+        },
+        {
+            "item": {
+                "name": "wow",
+                "description": "neato",
+                "value": 1
+            },
+            "amount": 5
+        }
+    ],
+    "coins": 0,
+    "name": "Items"
+}
