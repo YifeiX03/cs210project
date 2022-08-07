@@ -46,12 +46,24 @@ public class GUI extends JFrame implements ActionListener {
     private JPanel menuPanel;
     private JPanel inventoryPanel;
 
-    private JTextArea inventoryDisplay;
+    private JTextArea inventoryDisplay; // displays items in inventory, part of inventory panel
 
-    private JPanel interactionPanel;
+    private JPanel interactionPanel; // interaction between user and inventory, holds the follwing three
     private JPanel addPanel;
     private JPanel removePanel;
     private JPanel inspectPanel;
+
+    // Add stuff here:
+    private JComboBox<String> addComboBox;
+    private JTextField addText;
+
+    // Remove stuff here:
+    private JComboBox<String> removeComboBox; // combo box that shows stuff in inventory, for remove panel
+    private JTextField removeText;
+
+    // Inspection stuff here:
+    private JComboBox<String> inspectComboBox; // combo box that shows stuff that is in inventory, for insepct panel
+    private JTextArea inspectText;
 
     private Inventory inventory;
     private List<Item> itemShop;
@@ -112,7 +124,6 @@ public class GUI extends JFrame implements ActionListener {
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         inventoryDisplay.setFont(inventoryDisplay.getFont().deriveFont(20f));
-        inventoryDisplay.append("Items in Inventory: \n");
         showInventory(inventoryDisplay, inventory);
 
         scroll.setPreferredSize(new Dimension(WIDTH * 3 / 4, HEIGHT / 2));
@@ -124,10 +135,22 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     // MODIFIES: this
+    // EFFECTS: updates the given combo box to show everything that's presently in inventory
+    private void updateInventoryComboBox(JComboBox comboBox) {
+        comboBox.removeAllItems();
+        for (Slot slot : inventory.getSlots()) {
+            comboBox.addItem(slot.getItem().getName());
+        }
+        comboBox.repaint();
+        comboBox.revalidate();
+    }
+
+    // MODIFIES: this
     // EFFECTS: initializes the interaction panel, adding, removing, and inspecting items will be done in this panel
     //          also shows an image of a capybara when the program is started
     private void initializeInteractionPanel() {
         interactionPanel = new JPanel();
+
         initializeAddPanel();
         initializeRemovePanel();
         intializeInspectPanel();
@@ -165,6 +188,20 @@ public class GUI extends JFrame implements ActionListener {
         addPanel = createInventoryPanel();
         addPanel.setBackground(new Color(193, 149, 206));
 
+        addComboBox = new JComboBox<>();
+        for (Item item : itemShop) {
+            addComboBox.addItem(item.getName());
+        }
+        addPanel.add(addComboBox);
+
+        JLabel amountLabel = new JLabel("Amount:");
+        amountLabel.setBackground(Color.white);
+        amountLabel.setOpaque(true);
+        addText = new JTextField("0");
+        addText.setPreferredSize(new Dimension(30, 20));
+        addPanel.add(amountLabel);
+        addPanel.add(addText);
+
         JButton adding = makeButton("Add", "addItem", this);
         addPanel.add(adding);
     }
@@ -174,6 +211,18 @@ public class GUI extends JFrame implements ActionListener {
     private void initializeRemovePanel() {
         removePanel = createInventoryPanel();
         removePanel.setBackground(new Color(18, 61, 56));
+
+        removeComboBox = new JComboBox<>();
+        updateInventoryComboBox(removeComboBox);
+        removePanel.add(removeComboBox);
+
+        JLabel amountLabel = new JLabel("Amount:");
+        amountLabel.setBackground(Color.white);
+        amountLabel.setOpaque(true);
+        removeText = new JTextField("0");
+        removeText.setPreferredSize(new Dimension(30, 20));
+        removePanel.add(amountLabel);
+        removePanel.add(removeText);
 
         JButton removing = makeButton("Remove", "removeItem", this);
         removePanel.add(removing);
@@ -185,8 +234,19 @@ public class GUI extends JFrame implements ActionListener {
         inspectPanel = createInventoryPanel();
         inspectPanel.setBackground(new Color(194, 165, 94));
 
+        inspectComboBox = new JComboBox<>();
+        updateInventoryComboBox(inspectComboBox);
+        inspectPanel.add(inspectComboBox);
+
         JButton inspecting = makeButton("Inspect", "inspectItem", this);
         inspectPanel.add(inspecting);
+
+        inspectText = new JTextArea();
+        inspectText.setEditable(false);
+        inspectText.setFont(inventoryDisplay.getFont().deriveFont(20f));
+        inspectText.setPreferredSize(new Dimension(WIDTH * 3 / 4, HEIGHT / 4));
+
+        inspectPanel.add(inspectText);
     }
 
     // MODIFIES: this
@@ -202,6 +262,7 @@ public class GUI extends JFrame implements ActionListener {
     // EFFECTS: displays given inventory inside of the given text area
     private void showInventory(JTextArea textArea, Inventory inventory) {
         textArea.setText("");
+        textArea.append("Items in Inventory: \n");
         for (Slot slot : inventory.getSlots()) {
             textArea.append(slot.getAmount() + " * " + slot.getItem().getName());
             textArea.append("\n");
@@ -238,21 +299,109 @@ public class GUI extends JFrame implements ActionListener {
     // EFFECTS: listens to commands given out by the buttons and runs the correct method
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("addScreen")) {
-            switchToPanel(addPanel);
+            switchToAdd();
         } else if (e.getActionCommand().equals("addItem")) {
-            System.out.println("Adding...");
+            addItem();
         } else if (e.getActionCommand().equals("removeScreen")) {
-            switchToPanel(removePanel);
+            switchToRemove();
         } else if (e.getActionCommand().equals("removeItem")) {
-            System.out.println("Removing...");
+            removeItem();
         } else if (e.getActionCommand().equals("inspectScreen")) {
-            switchToPanel(inspectPanel);
+            switchToInspect();
         } else if (e.getActionCommand().equals("inspectItem")) {
-            System.out.println("Inspecting...");
+            inspectItem();
         } else if (e.getActionCommand().equals("save")) {
             save();
         } else if (e.getActionCommand().equals("load")) {
             load();
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECT: switches to add panel
+    private void switchToAdd() {
+        switchToPanel(addPanel);
+    }
+
+    // MODIFIES: this
+    // EFFECT: switches to remove panel
+    private void switchToRemove() {
+        updateInventoryComboBox(removeComboBox);
+        switchToPanel(removePanel);
+    }
+
+    // MODIFIES: this
+    // EFFECT: switches to inspect panel
+    private void switchToInspect() {
+        updateInventoryComboBox(inspectComboBox);
+        switchToPanel(inspectPanel);
+    }
+
+    // MODIFIES: this
+    // EFFECT: adds selected item to inventory
+    private void addItem() {
+        System.out.println("Adding...");
+        String selection = addComboBox.getItemAt(addComboBox.getSelectedIndex());
+
+        Item selectedItem = null;
+
+        for (Item item : itemShop) {
+            if (item.getName().equals(selection)) {
+                selectedItem = item;
+            }
+        }
+
+        int addAmount = Integer.parseInt(addText.getText());
+
+        if (selectedItem != null) {
+            inventory.addItem(selectedItem, addAmount);
+            showInventory(inventoryDisplay, inventory);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECT: removes selected item from inventory
+    private void removeItem() {
+        System.out.println("Removing...");
+        String selection = removeComboBox.getItemAt(removeComboBox.getSelectedIndex());
+
+        Item item = null;
+
+        for (Slot slot : inventory.getSlots()) {
+            if (slot.getItem().getName().equals(selection)) {
+                item = slot.getItem();
+            }
+        }
+
+        int removeAmount = Integer.parseInt(removeText.getText());
+
+        if (item != null) {
+            inventory.removeItem(item, removeAmount);
+            showInventory(inventoryDisplay, inventory);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECT: inspects selected item
+    private void inspectItem() {
+        System.out.println("Inspecting...");
+        String selection = inspectComboBox.getItemAt(inspectComboBox.getSelectedIndex());
+
+        Item item = null;
+
+        for (Slot slot : inventory.getSlots()) {
+            if (slot.getItem().getName().equals(selection)) {
+                item = slot.getItem();
+            }
+        }
+
+        if (item != null) {
+            inspectText.setText("");
+            inspectText.append("Name: " + item.getName());
+            inspectText.append("\nDescription: " + item.getDescription());
+            inspectText.append("\nValue: " + item.getValue());
+        } else {
+            inspectText.setText("Item not found");
         }
     }
 
