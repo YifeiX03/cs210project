@@ -2,11 +2,11 @@
     "slots": [
         {
             "item": {
-                "name": "test",
-                "description": "cool",
+                "name": "MR KRABS",
+                "description": "From Sponge Bob Square Pants",
                 "value": 10
             },
-            "amount": 20
+            "amount": 18
         },
         {
             "item": {
@@ -14,15 +14,7 @@
                 "description": "neato",
                 "value": 1
             },
-            "amount": 5
-        },
-        {
-            "item": {
-                "name": "neato",
-                "description": "pretty cool huh?",
-                "value": 50
-            },
-            "amount": 120
+            "amount": 1
         },
         {
             "item": {
@@ -30,7 +22,7 @@
                 "description": "Possum that is awesome",
                 "value": 500
             },
-            "amount": 8
+            "amount": 5
         }
     ],
     "coins": 0,

@@ -282,9 +282,9 @@ public class GUI extends JFrame implements ActionListener {
     // EFFECTS: initializes the inventory
     private void initializeInventory() {
         inventory = new Inventory("Items");
-        inventory.addItem(new Item("test", "cool", 10), 20);
-        inventory.addItem(new Item("wow", "neato", 1), 5);
-        inventory.addItem(new Item("neato", "pretty cool huh?", 50), 120);
+//        inventory.addItem(new Item("test", "cool", 10), 20);
+//        inventory.addItem(new Item("wow", "neato", 1), 5);
+//        inventory.addItem(new Item("neato", "pretty cool huh?", 50), 120);
     }
 
     // MODIFIES: this
@@ -293,6 +293,9 @@ public class GUI extends JFrame implements ActionListener {
         itemShop = new ArrayList<>();
         itemShop.add(new Item("Awesome Possum", "Possum that is awesome", 500));
         itemShop.add(new Item("MR KRABS", "From Sponge Bob Square Pants", 10));
+        itemShop.add(new Item("test", "cool", 10));
+        itemShop.add(new Item("wow", "neato", 1));
+        itemShop.add(new Item("neato", "pretty cool huh?", 50));
     }
 
     // MODIFIES: this
@@ -427,6 +430,8 @@ public class GUI extends JFrame implements ActionListener {
             jsonReader = new JsonReader(INVENTORY_STORE);
             inventory = jsonReader.read();
             showInventory(inventoryDisplay, inventory);
+            updateInventoryComboBox(removeComboBox);
+            updateInventoryComboBox(inspectComboBox);
             System.out.println("Load Successful");
         } catch (IOException e) {
             System.out.println("Unable to load");
