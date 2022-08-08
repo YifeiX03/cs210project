@@ -18,18 +18,17 @@ import persistence.JsonWriter;
 
 // IMPORTANT: DOCUMENT METHODS WHEN YOU ARE DONE
 
-// TODO:
 // Create main menu - showing interact with inventory, save, load, quit
 // Create inventory menu - showing add, remove, inspect, back
 // Inventory menu should show items in inventory and amount
 // Clicking on buttons in the menu, choosing items by typing name in pop-up window?
-// Add some sort of visual component, maybe show a capybara on start up and quit?
+// Add some sort of visual component, maybe show a capybara on start up
 
-// TODO: adding stuff
-// TODO: removing stuff
-// TODO: inspecting stuff
+// adding stuff done
+// removing stuff done
+// inspecting stuff done
 
-// TODO: documentation
+// documentation done
 
 // save and load are done
 // capybara image
