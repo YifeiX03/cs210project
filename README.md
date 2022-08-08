@@ -32,3 +32,13 @@ This project is of interest to me because I want to create games, and in most ga
 - As a user, I want to be able to save my items made and inventory to file
 - As a user, I want to be able to load my items made and inventory from file
 - As a user, I want the program to ask me if I want to save before exiting
+
+# Instructions for Grader
+
+- You can generate the first required event by clicking add or remove,
+  this will bring you to a menu allowing you to choose an item and the amount you want to add or remove
+- You can generate the second required event by clicking inspect,
+  this will bring you to a menu allowing you to choose an item in your inventory to inspect
+- You can locate my visual component by starting the application, there is a capybara
+- You can save the state of my application by pressing the save button
+- You can reload the state of my application by pressing the load button
