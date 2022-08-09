@@ -23,6 +23,7 @@ public class Inventory {
 
     //MODIFIES: this
     //EFFECTS: adds given number of an item to the inventory
+    //         logs addition of item to event log
     public void addItem(Item item, int count) {
         if (contains(item)) {
             findItem(item).addAmount(count);
@@ -38,6 +39,7 @@ public class Inventory {
     //MODIFIES: this
     //EFFECTS: removes given number of items from the inventory
     //         if the amount of an item is 0, removes slot from inventory
+    //         logs removal of item to event log
     public void removeItem(Item item, int count) {
         if (contains(item)) {
             findItem(item).removeAmount(count);

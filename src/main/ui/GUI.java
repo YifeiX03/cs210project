@@ -430,32 +430,40 @@ public class GUI extends JFrame implements ActionListener, WindowListener {
         }
     }
 
+    // EFFECTS: runs when gui window is opened, required for implementation of Window Listener
     public void windowOpened(WindowEvent e) {
 
     }
 
+    // EFFECTS: runs when gui window is activated, required for implementation of Window Listener
     public void windowActivated(WindowEvent e) {
 
     }
 
+    // EFFECTS: runs when gui window is closing
+    //          prints out the event log
     public void windowClosing(WindowEvent e) {
         for (Event event : EventLog.getInstance()) {
             System.out.println(event.toString());
         }
     }
 
+    // EFFECTS: runs when gui window is closed, required for implementation of Window Listener
     public void windowClosed(WindowEvent e) {
 
     }
 
+    // EFFECTS: runs when gui window is deactivated, required for implementation of Window Listener
     public void windowDeactivated(WindowEvent e) {
 
     }
 
+    // EFFECTS: runs when gui window is iconified, required for implementation of Window Listener
     public void windowIconified(WindowEvent e) {
 
     }
 
+    // EFFECTS: runs when gui window is deiconified, required for implementation of Window Listener
     public void windowDeiconified(WindowEvent e) {
     }
 
