@@ -56,4 +56,4 @@ Tue Aug 09 11:27:35 PDT 2022 \
 3 x wow removed from inventory 
 
 Note: Inspecting items do not add anything to event log as inspecting is implemented entirely in the GUI,
-and in accordance to the instructions no logEvent calls must be made from the ui package
+and in accordance to the instructions no logEvent calls can be made from the ui package
