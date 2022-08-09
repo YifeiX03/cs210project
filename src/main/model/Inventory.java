@@ -29,6 +29,8 @@ public class Inventory {
         } else {
             slots.add(new Slot(item, count));
         }
+        EventLog.getInstance().logEvent(
+                new Event(count + " x " + item.getName() + " added to inventory"));
     }
 
     //REQUIRES: item must be an item that exists in inventory
@@ -43,6 +45,8 @@ public class Inventory {
                 slots.remove(findIndex(item));
             }
         }
+        EventLog.getInstance().logEvent(
+                new Event(count + " x " + item.getName() + " removed from inventory"));
     }
 
     //EFFECTS: returns amount of slots in inventory

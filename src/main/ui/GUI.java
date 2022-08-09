@@ -5,35 +5,26 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
+import model.Event;
+import model.EventLog;
 import model.Inventory;
 import model.Item;
 import model.Slot;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
-// IMPORTANT: DOCUMENT METHODS WHEN YOU ARE DONE
-
-// Create main menu - showing interact with inventory, save, load, quit
-// Create inventory menu - showing add, remove, inspect, back
-// Inventory menu should show items in inventory and amount
-// Clicking on buttons in the menu, choosing items by typing name in pop-up window?
-// Add some sort of visual component, maybe show a capybara on start up
-
-// adding stuff done
-// removing stuff done
-// inspecting stuff done
-
-// documentation done
-
-// save and load are done
-// capybara image
-
-public class GUI extends JFrame implements ActionListener {
+// GUI class, allows user to interact with inventory through a gui.
+//  menu buttons on left
+//  inventory storage in bottom right
+//  inventory interaction on top right
+public class GUI extends JFrame implements ActionListener, WindowListener {
     private static final int HEIGHT = 800;
     private static final int WIDTH = 800;
 
@@ -82,6 +73,8 @@ public class GUI extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
+
+        addWindowListener(this);
     }
 
     // MODIFIES: this
@@ -342,7 +335,7 @@ public class GUI extends JFrame implements ActionListener {
     // MODIFIES: this
     // EFFECT: adds selected item to inventory
     private void addItem() {
-        System.out.println("Adding...");
+//        System.out.println("Adding...");
         String selection = addComboBox.getItemAt(addComboBox.getSelectedIndex());
 
         Item selectedItem = null;
@@ -364,7 +357,7 @@ public class GUI extends JFrame implements ActionListener {
     // MODIFIES: this
     // EFFECT: removes selected item from inventory
     private void removeItem() {
-        System.out.println("Removing...");
+//        System.out.println("Removing...");
         String selection = removeComboBox.getItemAt(removeComboBox.getSelectedIndex());
 
         Item item = null;
@@ -386,7 +379,7 @@ public class GUI extends JFrame implements ActionListener {
     // MODIFIES: this
     // EFFECT: inspects selected item
     private void inspectItem() {
-        System.out.println("Inspecting...");
+//        System.out.println("Inspecting...");
         String selection = inspectComboBox.getItemAt(inspectComboBox.getSelectedIndex());
 
         Item item = null;
@@ -409,7 +402,7 @@ public class GUI extends JFrame implements ActionListener {
 
     // EFFECTS: saves the inventory to file
     private void save() {
-        System.out.println("Saving...");
+//        System.out.println("Saving...");
         try {
             jsonWriter = new JsonWriter(INVENTORY_STORE);
             jsonWriter.open();
@@ -424,7 +417,7 @@ public class GUI extends JFrame implements ActionListener {
     // MODIFIES: this
     // EFFECTS: loads inventory
     private void load() {
-        System.out.println("Loading...");
+//        System.out.println("Loading...");
         try {
             jsonReader = new JsonReader(INVENTORY_STORE);
             inventory = jsonReader.read();
@@ -436,4 +429,34 @@ public class GUI extends JFrame implements ActionListener {
             System.out.println("Unable to load");
         }
     }
+
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    public void windowClosing(WindowEvent e) {
+        for (Event event : EventLog.getInstance()) {
+            System.out.println(event.toString());
+        }
+    }
+
+    public void windowClosed(WindowEvent e) {
+
+    }
+
+    public void windowDeactivated(WindowEvent e) {
+
+    }
+
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    public void windowDeiconified(WindowEvent e) {
+    }
+
 }

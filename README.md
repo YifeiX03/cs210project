@@ -42,3 +42,18 @@ This project is of interest to me because I want to create games, and in most ga
 - You can locate my visual component by starting the application, there is a capybara
 - You can save the state of my application by pressing the save button
 - You can reload the state of my application by pressing the load button
+
+# Phase 4: Task 2
+Tue Aug 09 11:27:21 PDT 2022 \
+5 x Awesome Possum added to inventory \
+Tue Aug 09 11:27:21 PDT 2022 \
+5 x Awesome Possum added to inventory \
+Tue Aug 09 11:27:26 PDT 2022 \
+10 x wow added to inventory \
+Tue Aug 09 11:27:30 PDT 2022 \
+20 x MR KRABS added to inventory \
+Tue Aug 09 11:27:35 PDT 2022 \
+3 x wow removed from inventory 
+
+Note: Inspecting items do not add anything to event log as inspecting is implemented entirely in the GUI,
+and in accordance to the instructions no logEvent calls must be made from the ui package
