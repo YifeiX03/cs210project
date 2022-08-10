@@ -57,3 +57,11 @@ Tue Aug 09 11:27:35 PDT 2022 \
 
 Note: Inspecting items do not add anything to event log as inspecting is implemented entirely in the GUI,
 and in accordance to the instructions no logEvent calls can be made from the ui package
+
+# Phase 4: Task 3
+I think that there is low cohesion in my code, and I believe that if I split the ui and gui parts of the code into
+multiple classes - for example: one class handles adding, another one handles removing,
+and another one handles inspecting - that would have made the code easier to understand. \
+Additionally, the code for adding, removing, and inspecting something from the inventory are similar, with all of them
+involving looping through the slots to find an item with a name equal to the input string. If I had more time, I
+would've made a helper function that reduced the amount of repeated code in those 3 functions.
