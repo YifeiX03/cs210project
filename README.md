@@ -61,11 +61,11 @@ and in accordance to the instructions no logEvent calls can be made from the ui 
 # Phase 4: Task 3
  - I think that there is low cohesion in my code, and I believe that if I split the ui and gui parts of the code into
 multiple classes - for example: one class handles adding, another one handles removing,
-and another one handles inspecting - that would have made the code easier to understand. \
+and another one handles inspecting - that would have made the code easier to understand. 
  - Additionally, the code for adding, removing, and inspecting something from the inventory are similar, with all of them
 involving looping through the slots to find an item with a name equal to the input string. If I had more time, I
-would've made a helper function that reduced the amount of repeated code in those 3 functions. \
+would've made a helper function that reduced the amount of repeated code in those 3 functions. 
  - There is also no exceptions in the code, so users can input "illegal" values like negative amounts, so I would also add
-exception handling for those cases. \
+exception handling for those cases. 
  - I also considered  making another class that extends inventory, with the new class being similar to inventory but
 it has an unlimited amount of each added item, this way I can use it as a sort of item dispenser.
