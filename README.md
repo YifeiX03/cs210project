@@ -64,4 +64,6 @@ multiple classes - for example: one class handles adding, another one handles re
 and another one handles inspecting - that would have made the code easier to understand. \
 Additionally, the code for adding, removing, and inspecting something from the inventory are similar, with all of them
 involving looping through the slots to find an item with a name equal to the input string. If I had more time, I
-would've made a helper function that reduced the amount of repeated code in those 3 functions.
+would've made a helper function that reduced the amount of repeated code in those 3 functions. \
+There is also no exceptions in the code, so users can input "illegal" values like negative amounts, so I would also add
+exception handling for those cases.
